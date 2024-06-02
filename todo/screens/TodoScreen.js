@@ -1,3 +1,4 @@
+// #region Imports
 import { useState, useEffect } from 'react';
 import {
   StyleSheet,
@@ -12,14 +13,15 @@ import TodoInput from '../components/TODO/TodoInput';
 import { fetchCurrentUser } from '../api/user/users';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import CustomButton from '../components/Custom/CustomButton';
-import customFetch from '../utils/customFetch';
 import { createTodo, fetchAllTodos } from '../api/todo/todo';
+// #endregion
 
 const TodoScreen = () => {
   const queryClient = useQueryClient();
   const [enteredTodoText, setEnteredTodoText] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+  // #region Query Logic
   const {
     data: userData,
     isLoading: isUserLoading,
@@ -54,7 +56,9 @@ const TodoScreen = () => {
       queryClient.invalidateQueries(['todos']); // Invalidate 'todos' query to refetch data
     },
   });
+  // #endregion
 
+  // #region Event Handler
   const inputHandler = (enteredText) => {
     setEnteredTodoText(enteredText);
   };
@@ -67,6 +71,7 @@ const TodoScreen = () => {
   const closeModalHandler = () => {
     setIsModalVisible(false);
   };
+  // #endregion
 
   if (isUserLoading) {
     return <ActivityIndicator />;
