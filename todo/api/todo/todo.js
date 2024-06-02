@@ -21,3 +21,14 @@ export const createTodo = async (title) => {
     throw error;
   }
 };
+
+export const deleteTodo = async (id) => {
+  try {
+    const response = await customFetch.delete(`/todos/${id}`);
+    console.log('TODOS', response);
+    return response;
+  } catch (error) {
+    console.error('Error fetching current user:', error);
+    throw error;
+  }
+};

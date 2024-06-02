@@ -7,9 +7,32 @@ import {
   TextInput,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-const TodoItem = ({ title, completed, onEdit, onDelete }) => {
+import { deleteTodo } from '../../api/todo/todo';
+
+const TodoItem = ({ _id, title, completed, onEdit }) => {
+  const queryClient = useQueryClient();
   const [isChecked, setIsChecked] = useState(completed);
+
+  const handleDelete = useMutation({
+    mutationFn: () => deleteTodo(_id),
+    onMutate: async () => {
+      await queryClient.cancelQueries(['todos']);
+      const previousTodos = queryClient.getQueryData(['todos']);
+      queryClient.setQueryData(
+        ['todos'],
+        (old) => old.filter((todo) => todo._id !== _id) // Corrected filtering based on _id
+      );
+      return { previousTodos };
+    },
+    onError: (err, _, context) => {
+      queryClient.setQueryData(['todos'], context.previousTodos);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(['todos']);
+    },
+  });
 
   const handleCheckChange = () => {
     setIsChecked(!isChecked);
@@ -32,7 +55,7 @@ const TodoItem = ({ title, completed, onEdit, onDelete }) => {
       <TouchableOpacity onPress={onEdit} style={styles.iconButton}>
         <MaterialIcons name="edit" size={24} color="#007bff" />
       </TouchableOpacity>
-      <TouchableOpacity onPress={onDelete} style={styles.iconButton}>
+      <TouchableOpacity onPress={handleDelete.mutate} style={styles.iconButton}>
         <MaterialIcons name="delete" size={24} color="#dc3545" />
       </TouchableOpacity>
     </View>
