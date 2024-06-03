@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Modal,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 import TodoItem from '../components/TODO/TodoItem';
 import TodoInput from '../components/TODO/TodoInput';
@@ -15,11 +16,14 @@ import { fetchCurrentUser } from '../api/user/users';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import CustomButton from '../components/Custom/CustomButton';
 import { createTodo, fetchAllTodos } from '../api/todo/todo';
+import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
+import customFetch from '../utils/customFetch';
 // #endregion
 
 const TodoScreen = () => {
   const queryClient = useQueryClient();
+  const navigation = useNavigation();
   const [enteredTodoText, setEnteredTodoText] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentDate, setCurrentDate] = useState('');
@@ -32,6 +36,11 @@ const TodoScreen = () => {
   } = useQuery({
     queryKey: ['user'],
     queryFn: fetchCurrentUser,
+    onError: (error) => {
+      if (error.response.status === 401) {
+        navigation.navigate('Login');
+      }
+    },
   });
 
   const {
@@ -75,10 +84,20 @@ const TodoScreen = () => {
   const closeModalHandler = () => {
     setIsModalVisible(false);
   };
+
+  const logoutHandler = async () => {
+    try {
+      const response = await customFetch.get('/auth/logout');
+      console.log('response', response.data.msg);
+      console.log('User logged out');
+      navigation.navigate('Login');
+    } catch (error) {
+      console.error('Logout failed', error);
+    }
+  };
   // #endregion
 
   useEffect(() => {
-    // Moved useEffect hook outside the component
     const currentDate = new Date().toDateString();
     setCurrentDate(currentDate);
   }, []);
@@ -88,12 +107,18 @@ const TodoScreen = () => {
   }
 
   if (userError) {
-    return <Text>{userError.message}</Text>; // Fixed variable name error
+    return <Text>{userError.message}</Text>;
   }
 
+  if (todoError) {
+    return <Text>{todoError.message}</Text>;
+  }
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
+        <TouchableOpacity style={styles.logoutButton} onPress={logoutHandler}>
+          <MaterialIcons name="logout" size={24} color="black" />
+        </TouchableOpacity>
         {userData?.image ? (
           <Image
             source={{ uri: userData.image }}
@@ -245,6 +270,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  logoutButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    padding: 10,
   },
 });
 // #endregion
