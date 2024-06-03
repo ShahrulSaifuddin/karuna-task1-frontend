@@ -94,9 +94,10 @@ const TodoItem = ({ _id, title, completed, onEdit }) => {
         <TextInput
           value={title}
           style={[styles.title, isChecked && styles.completedTitle]}
-          editable={!isChecked}
+          editable={false}
           multiline={true}
           numberOfLines={2}
+          scrollEnabled={false}
         />
       </View>
       <TouchableOpacity onPress={handleEdit} style={styles.iconButton}>

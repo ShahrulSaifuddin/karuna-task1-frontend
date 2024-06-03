@@ -104,7 +104,7 @@ const TodoScreen = () => {
             <MaterialIcons name="person" size={50} color="black" />
           </View>
         )}
-        <Text style={{ textTransform: 'capitalize' }}>
+        <Text style={styles.headerText}>
           Welcome {userData?.firstName} {userData?.lastName}
         </Text>
       </View>
@@ -208,8 +208,8 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    justifyContent: 'center', // Center vertically
-    alignItems: 'center', // Center horizontally
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#fff',
     paddingHorizontal: 16,
   },
@@ -220,8 +220,15 @@ const styles = StyleSheet.create({
   },
   closeIcon: {
     position: 'absolute',
-    top: 8, // Adjust as needed for the desired top spacing
-    right: 16, // Adjust as needed for the desired right spacing
+    top: 60,
+    right: 40,
+  },
+  headerText: {
+    textTransform: 'capitalize',
+    marginTop: 20,
+    marginBottom: 10,
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
 // #endregion
