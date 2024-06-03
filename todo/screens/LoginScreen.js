@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Alert } from 'react-native';
+import { View, Alert, Text } from 'react-native';
 import { handleLogin } from '../api/auth/auth';
 import CustomTextInput from '../components/Custom/CustomTextInput';
 import CustomButton from '../components/Custom/CustomButton';
@@ -30,6 +30,9 @@ export default function LoginScreen({ navigation }) {
         secureTextEntry
       />
       <CustomButton title="Login" onPress={onLogin} />
+      <Text onPress={() => navigation.navigate('Register')}>
+        Not Register Yet?
+      </Text>
     </View>
   );
 }

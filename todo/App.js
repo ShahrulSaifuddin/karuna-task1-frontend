@@ -5,6 +5,7 @@ import LoginScreen from './screens/LoginScreen';
 import EditTodo from './screens/EditTodo';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useReactQueryDevTools } from '@dev-plugins/react-query';
+import RegisterScreen from './screens/RegisterScreen';
 
 const Stack = createStackNavigator();
 
@@ -17,7 +18,7 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Login">
           <Stack.Screen name="Login" component={LoginScreen} />
-          {/* <Stack.Screen name="Register" component={RegisterScreen} /> */}
+          <Stack.Screen name="Register" component={RegisterScreen} />
           <Stack.Screen name="Todo" component={TodoScreen} />
           <Stack.Screen name="EditTodo" component={EditTodo} />
         </Stack.Navigator>

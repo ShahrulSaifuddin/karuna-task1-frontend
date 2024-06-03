@@ -25,3 +25,25 @@ export const handleLogin = async ({ userName, password, navigation }) => {
     }
   }
 };
+
+export const register = async ({
+  firstName,
+  lastName,
+  userName,
+  email,
+  password,
+}) => {
+  try {
+    const response = await customFetch.post('/auth/register', {
+      firstName,
+      lastName,
+      userName,
+      email,
+      password,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error registering user:', error);
+    throw error;
+  }
+};
