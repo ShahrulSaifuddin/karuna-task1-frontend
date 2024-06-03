@@ -68,6 +68,7 @@ const TodoScreen = () => {
 
   const addTodoHandler = async () => {
     await addTodo.mutateAsync(enteredTodoText);
+    setEnteredTodoText('');
     setIsModalVisible(false);
   };
 
@@ -119,6 +120,7 @@ const TodoScreen = () => {
             style={styles.closeIcon}
           />
           <TodoInput
+            inputValue={enteredTodoText}
             inputHandler={inputHandler}
             addTodoHandler={addTodoHandler}
           />

@@ -46,6 +46,7 @@ const EditTodo = ({ route, navigation }) => {
       />
       <CustomButton
         title="Edit Todo"
+        disabled={!title.trim()}
         onPress={() => handleUpdate.mutate(title)}
       />
     </View>

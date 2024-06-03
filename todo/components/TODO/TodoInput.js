@@ -3,11 +3,12 @@ import { View, StyleSheet, Button } from 'react-native';
 import CustomTextInput from '../Custom/CustomTextInput';
 import CustomButton from '../Custom/CustomButton';
 
-const TodoInput = ({ inputHandler, addTodoHandler }) => {
+const TodoInput = ({ inputValue, inputHandler, addTodoHandler }) => {
   return (
     <View style={styles.inputContainer}>
       <CustomTextInput
         placeholder="Your todo"
+        value={inputValue}
         onChangeText={inputHandler}
         style={styles.input}
       />
@@ -15,6 +16,7 @@ const TodoInput = ({ inputHandler, addTodoHandler }) => {
         title="Add Todo"
         onPress={addTodoHandler}
         style={styles.button}
+        disabled={!inputValue.trim()}
       />
     </View>
   );
