@@ -1,15 +1,18 @@
+// #region Imports
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import CustomButton from '../components/Custom/CustomButton';
 import CustomTextInput from '../components/Custom/CustomTextInput';
 import { editTodo } from '../api/todo/todo';
+// #endregion
 
 const EditTodo = ({ route, navigation }) => {
   const { _id, currentTitle } = route.params;
   const [title, setTitle] = useState(currentTitle);
   const queryClient = useQueryClient();
 
+  // #region Query Logic
   const handleUpdate = useMutation({
     mutationFn: () => editTodo(_id, title),
     onMutate: async (newTitle) => {
@@ -32,6 +35,7 @@ const EditTodo = ({ route, navigation }) => {
       queryClient.invalidateQueries(['todos']);
     },
   });
+  // #endregion
 
   return (
     <View style={styles.container}>
@@ -47,6 +51,7 @@ const EditTodo = ({ route, navigation }) => {
 
 export default EditTodo;
 
+// #region Styling
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -61,3 +66,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
 });
+// #endregion

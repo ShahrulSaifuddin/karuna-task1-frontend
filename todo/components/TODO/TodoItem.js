@@ -1,3 +1,4 @@
+// #region Imports
 import React, { useState } from 'react';
 import {
   StyleSheet,
@@ -10,14 +11,15 @@ import {
 import { MaterialIcons } from '@expo/vector-icons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigation } from '@react-navigation/native';
-
 import { deleteTodo, updateTodo } from '../../api/todo/todo';
+// #endregion
 
 const TodoItem = ({ _id, title, completed, onEdit }) => {
   const queryClient = useQueryClient();
   const navigation = useNavigation();
   const [isChecked, setIsChecked] = useState(completed);
 
+  // #region Query Logic
   const handleDelete = useMutation({
     mutationFn: () => deleteTodo(_id),
     onMutate: async () => {
@@ -55,7 +57,9 @@ const TodoItem = ({ _id, title, completed, onEdit }) => {
       queryClient.invalidateQueries(['todos']);
     },
   });
+  // #endregion
 
+  // #region Event Handler
   const handleCheckChange = () => {
     setIsChecked(!isChecked);
     handleCheck.mutate();
@@ -82,6 +86,7 @@ const TodoItem = ({ _id, title, completed, onEdit }) => {
   const handleEdit = () => {
     navigation.navigate('EditTodo', { _id, currentTitle: title });
   };
+  // #endregion
 
   return (
     <View style={styles.container}>
@@ -109,6 +114,7 @@ const TodoItem = ({ _id, title, completed, onEdit }) => {
 
 export default TodoItem;
 
+// #region Styling
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -133,3 +139,4 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 });
+// #endregion

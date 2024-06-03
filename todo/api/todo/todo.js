@@ -1,5 +1,6 @@
 import customFetch from '../../utils/customFetch';
 
+// #region Fetch All Todos
 export const fetchAllTodos = async () => {
   try {
     const response = await customFetch.get('/todos');
@@ -10,7 +11,9 @@ export const fetchAllTodos = async () => {
     throw error;
   }
 };
+// #endregion
 
+// #region Create Todo
 export const createTodo = async (title) => {
   try {
     const response = await customFetch.post('/todos', { title: title });
@@ -21,7 +24,9 @@ export const createTodo = async (title) => {
     throw error;
   }
 };
+// #endregion
 
+// #region Delete Todo
 export const deleteTodo = async (id) => {
   try {
     const response = await customFetch.delete(`/todos/${id}`);
@@ -32,7 +37,9 @@ export const deleteTodo = async (id) => {
     throw error;
   }
 };
+// #endregion
 
+// #region Edit Todo Title
 export const editTodo = async (id, title) => {
   try {
     const response = await customFetch.patch(`/todos/${id}`, { title });
@@ -43,7 +50,9 @@ export const editTodo = async (id, title) => {
     throw error;
   }
 };
+// #endregion
 
+// #region Update Checked Box Todo
 export const updateTodo = async (id) => {
   try {
     const response = await customFetch.patch('/todos', { id });
@@ -54,3 +63,4 @@ export const updateTodo = async (id) => {
     throw error;
   }
 };
+// #endregion

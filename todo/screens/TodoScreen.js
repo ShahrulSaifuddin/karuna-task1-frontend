@@ -64,7 +64,7 @@ const TodoScreen = () => {
   };
 
   const addTodoHandler = async () => {
-    await addTodo.mutateAsync(enteredTodoText); // Call addTodo mutation with enteredTodoText
+    await addTodo.mutateAsync(enteredTodoText);
     setIsModalVisible(false);
   };
 
@@ -108,6 +108,7 @@ const TodoScreen = () => {
 
 export default TodoScreen;
 
+// #region Styling
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -123,3 +124,4 @@ const styles = StyleSheet.create({
     flex: 7,
   },
 });
+// #endregion
