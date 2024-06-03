@@ -7,6 +7,7 @@ import {
   FlatList,
   ActivityIndicator,
   Modal,
+  Image,
 } from 'react-native';
 import TodoItem from '../components/TODO/TodoItem';
 import TodoInput from '../components/TODO/TodoInput';
@@ -14,12 +15,15 @@ import { fetchCurrentUser } from '../api/user/users';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import CustomButton from '../components/Custom/CustomButton';
 import { createTodo, fetchAllTodos } from '../api/todo/todo';
+import { MaterialIcons } from '@expo/vector-icons';
+
 // #endregion
 
 const TodoScreen = () => {
   const queryClient = useQueryClient();
   const [enteredTodoText, setEnteredTodoText] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [currentDate, setCurrentDate] = useState('');
 
   // #region Query Logic
   const {
@@ -81,10 +85,28 @@ const TodoScreen = () => {
     return <Text>{error.message}</Text>;
   }
 
+  useEffect(() => {
+    const currentDate = new Date().toDateString();
+    setCurrentDate(currentDate);
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <Text>Welcome {userData?.userName}</Text>
+        {userData?.image ? (
+          <Image
+            source={{ uri: userData.image }}
+            style={styles.userImage}
+            resizeMode="cover"
+          />
+        ) : (
+          <View style={styles.iconContainer}>
+            <MaterialIcons name="person" size={50} color="black" />
+          </View>
+        )}
+        <Text style={{ textTransform: 'capitalize' }}>
+          Welcome {userData?.firstName} {userData?.lastName}
+        </Text>
       </View>
       <Modal visible={isModalVisible} animationType="slide">
         <TodoInput
@@ -94,6 +116,7 @@ const TodoScreen = () => {
         />
       </Modal>
       <View style={styles.todosContainer}>
+        <Text style={styles.currentDate}>{currentDate}</Text>
         <FlatList
           data={todoData}
           renderItem={({ item }) => <TodoItem {...item} />}
@@ -101,7 +124,14 @@ const TodoScreen = () => {
           alwaysBounceVertical={true}
         />
       </View>
-      <CustomButton title="Add Todo" onPress={() => setIsModalVisible(true)} />
+      <View style={styles.buttonContainer}>
+        <CustomButton
+          title="+"
+          onPress={() => setIsModalVisible(true)}
+          style={styles.button}
+          textStyle={styles.buttonText}
+        />
+      </View>
     </View>
   );
 };
@@ -112,16 +142,60 @@ export default TodoScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 50,
-    paddingHorizontal: 16,
   },
   headerContainer: {
     flex: 3,
     borderBottomWidth: 1,
     borderBottomColor: '#cccccc',
+    backgroundColor: '#A7E6FF',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    paddingBottom: 10,
+  },
+  userImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginBottom: 10,
+  },
+  iconContainer: {
+    width: 70,
+    height: 70,
+    borderRadius: 50,
+    backgroundColor: '#ccc',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  currentDate: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333333',
+    marginBottom: 10,
+    textAlign: 'center',
   },
   todosContainer: {
     flex: 7,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+  },
+  button: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#007bff',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonText: {
+    fontSize: 24,
+    color: 'white',
+    textAlign: 'center',
   },
 });
 // #endregion

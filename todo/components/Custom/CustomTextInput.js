@@ -22,11 +22,12 @@ const CustomTextInput = ({
 const styles = StyleSheet.create({
   input: {
     height: 40,
-    borderColor: 'gray',
     borderWidth: 1,
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
     margin: 10,
-    borderRadius: 5,
+    borderRadius: 20,
+    backgroundColor: 'white',
+    borderColor: 'transparent',
   },
 });
 

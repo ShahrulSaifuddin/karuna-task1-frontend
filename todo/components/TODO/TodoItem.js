@@ -1,25 +1,21 @@
-// #region Imports
 import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
-  Text,
-  TouchableOpacity,
   TextInput,
+  TouchableOpacity,
   Alert,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigation } from '@react-navigation/native';
 import { deleteTodo, updateTodo } from '../../api/todo/todo';
-// #endregion
 
 const TodoItem = ({ _id, title, completed, onEdit }) => {
   const queryClient = useQueryClient();
   const navigation = useNavigation();
   const [isChecked, setIsChecked] = useState(completed);
 
-  // #region Query Logic
   const handleDelete = useMutation({
     mutationFn: () => deleteTodo(_id),
     onMutate: async () => {
@@ -57,9 +53,7 @@ const TodoItem = ({ _id, title, completed, onEdit }) => {
       queryClient.invalidateQueries(['todos']);
     },
   });
-  // #endregion
 
-  // #region Event Handler
   const handleCheckChange = () => {
     setIsChecked(!isChecked);
     handleCheck.mutate();
@@ -86,7 +80,6 @@ const TodoItem = ({ _id, title, completed, onEdit }) => {
   const handleEdit = () => {
     navigation.navigate('EditTodo', { _id, currentTitle: title });
   };
-  // #endregion
 
   return (
     <View style={styles.container}>
@@ -97,11 +90,15 @@ const TodoItem = ({ _id, title, completed, onEdit }) => {
           color={isChecked ? '#007bff' : '#333333'}
         />
       </TouchableOpacity>
-      <TextInput
-        value={title}
-        style={[styles.title, isChecked && styles.completedTitle]}
-        editable={!isChecked}
-      />
+      <View style={styles.textInputContainer}>
+        <TextInput
+          value={title}
+          style={[styles.title, isChecked && styles.completedTitle]}
+          editable={!isChecked}
+          multiline={true}
+          numberOfLines={2}
+        />
+      </View>
       <TouchableOpacity onPress={handleEdit} style={styles.iconButton}>
         <MaterialIcons name="edit" size={24} color="#007bff" />
       </TouchableOpacity>
@@ -112,22 +109,24 @@ const TodoItem = ({ _id, title, completed, onEdit }) => {
   );
 };
 
-export default TodoItem;
-
-// #region Styling
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#cccccc',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    backgroundColor: '#ffffff',
+    borderRadius: 8,
+    marginBottom: 10,
+    elevation: 2,
   },
   checkbox: {
-    marginRight: 8,
+    marginRight: 16,
+  },
+  textInputContainer: {
+    flex: 1,
   },
   title: {
-    flex: 1,
     fontSize: 18,
     color: '#333333',
   },
@@ -136,7 +135,8 @@ const styles = StyleSheet.create({
     color: '#cccccc',
   },
   iconButton: {
-    marginLeft: 8,
+    marginLeft: 16,
   },
 });
-// #endregion
+
+export default TodoItem;

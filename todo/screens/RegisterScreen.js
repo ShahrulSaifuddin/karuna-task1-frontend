@@ -33,7 +33,8 @@ const RegisterScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Register</Text>
+      <Text style={styles.title}>Welcome Onboard</Text>
+      <Text style={styles.text}>Let's help you meet up your tasks</Text>
       <CustomTextInput
         placeholder="First Name"
         value={firstName}
@@ -60,7 +61,20 @@ const RegisterScreen = ({ navigation }) => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <CustomButton title="Register" onPress={handleRegister} />
+      <CustomButton
+        title="Register"
+        onPress={handleRegister}
+        style={styles.button}
+      />
+      <Text style={styles.accountText}>
+        Already have an account?{' '}
+        <Text
+          style={styles.signin}
+          onPress={() => navigation.navigate('Login')}
+        >
+          sign in
+        </Text>
+      </Text>
     </View>
   );
 };
@@ -77,5 +91,24 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 16,
     textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  text: {
+    fontSize: 16,
+    marginBottom: 18,
+    textAlign: 'center',
+    color: 'grey',
+    fontWeight: '900',
+  },
+  button: {
+    marginTop: 30,
+  },
+  accountText: {
+    marginTop: 30,
+    textAlign: 'center',
+  },
+  signin: {
+    color: '#3ABEF9',
+    fontWeight: 'bold',
   },
 });
