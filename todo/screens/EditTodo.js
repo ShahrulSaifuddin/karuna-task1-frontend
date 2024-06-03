@@ -44,7 +44,10 @@ const EditTodo = ({ route, navigation }) => {
         value={title}
         onChangeText={setTitle}
       />
-      <CustomButton title="Save" onPress={() => handleUpdate.mutate(title)} />
+      <CustomButton
+        title="Edit Todo"
+        onPress={() => handleUpdate.mutate(title)}
+      />
     </View>
   );
 };

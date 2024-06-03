@@ -1,5 +1,5 @@
 // #region Imports
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; // Added useEffect import
 import {
   StyleSheet,
   Text,
@@ -16,7 +16,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import CustomButton from '../components/Custom/CustomButton';
 import { createTodo, fetchAllTodos } from '../api/todo/todo';
 import { MaterialIcons } from '@expo/vector-icons';
-
 // #endregion
 
 const TodoScreen = () => {
@@ -77,18 +76,19 @@ const TodoScreen = () => {
   };
   // #endregion
 
+  useEffect(() => {
+    // Moved useEffect hook outside the component
+    const currentDate = new Date().toDateString();
+    setCurrentDate(currentDate);
+  }, []);
+
   if (isUserLoading) {
     return <ActivityIndicator />;
   }
 
   if (userError) {
-    return <Text>{error.message}</Text>;
+    return <Text>{userError.message}</Text>; // Fixed variable name error
   }
-
-  useEffect(() => {
-    const currentDate = new Date().toDateString();
-    setCurrentDate(currentDate);
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -109,11 +109,20 @@ const TodoScreen = () => {
         </Text>
       </View>
       <Modal visible={isModalVisible} animationType="slide">
-        <TodoInput
-          inputHandler={inputHandler}
-          addTodoHandler={addTodoHandler}
-          closeModalHandler={closeModalHandler}
-        />
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalTitle}>Add Todo</Text>
+          <MaterialIcons
+            name="close"
+            size={24}
+            color="#333"
+            onPress={closeModalHandler}
+            style={styles.closeIcon}
+          />
+          <TodoInput
+            inputHandler={inputHandler}
+            addTodoHandler={addTodoHandler}
+          />
+        </View>
       </Modal>
       <View style={styles.todosContainer}>
         <Text style={styles.currentDate}>{currentDate}</Text>
@@ -196,6 +205,23 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: 'white',
     textAlign: 'center',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center', // Center vertically
+    alignItems: 'center', // Center horizontally
+    backgroundColor: '#fff',
+    paddingHorizontal: 16,
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
+  closeIcon: {
+    position: 'absolute',
+    top: 8, // Adjust as needed for the desired top spacing
+    right: 16, // Adjust as needed for the desired right spacing
   },
 });
 // #endregion

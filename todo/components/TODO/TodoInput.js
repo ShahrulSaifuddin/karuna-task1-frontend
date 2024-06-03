@@ -3,7 +3,7 @@ import { View, StyleSheet, Button } from 'react-native';
 import CustomTextInput from '../Custom/CustomTextInput';
 import CustomButton from '../Custom/CustomButton';
 
-const TodoInput = ({ inputHandler, addTodoHandler, closeModalHandler }) => {
+const TodoInput = ({ inputHandler, addTodoHandler }) => {
   return (
     <View style={styles.inputContainer}>
       <CustomTextInput
@@ -16,7 +16,6 @@ const TodoInput = ({ inputHandler, addTodoHandler, closeModalHandler }) => {
         onPress={addTodoHandler}
         style={styles.button}
       />
-      <CustomButton title="close" onPress={closeModalHandler} />
     </View>
   );
 };
@@ -31,7 +30,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderBottomColor: 'transparent',
   },
   input: {
     flex: 1,
