@@ -43,3 +43,14 @@ export const editTodo = async (id, title) => {
     throw error;
   }
 };
+
+export const updateTodo = async (id) => {
+  try {
+    const response = await customFetch.patch('/todos', { id });
+    console.log('TODOS', response);
+    return response;
+  } catch (error) {
+    console.error('Error fetching current user:', error);
+    throw error;
+  }
+};

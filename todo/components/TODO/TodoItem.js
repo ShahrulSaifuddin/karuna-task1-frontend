@@ -11,7 +11,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigation } from '@react-navigation/native';
 
-import { deleteTodo } from '../../api/todo/todo';
+import { deleteTodo, updateTodo } from '../../api/todo/todo';
 
 const TodoItem = ({ _id, title, completed, onEdit }) => {
   const queryClient = useQueryClient();
@@ -36,8 +36,29 @@ const TodoItem = ({ _id, title, completed, onEdit }) => {
     },
   });
 
+  const handleCheck = useMutation({
+    mutationFn: () => updateTodo(_id),
+    onMutate: async () => {
+      await queryClient.cancelQueries(['todos']);
+      const previousTodos = queryClient.getQueryData(['todos']);
+      queryClient.setQueryData(['todos'], (old) =>
+        old.map((todo) =>
+          todo._id === _id ? { ...todo, completed: !isChecked } : todo
+        )
+      );
+      return { previousTodos };
+    },
+    onError: (err, _, context) => {
+      queryClient.setQueryData(['todos'], context.previousTodos);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(['todos']);
+    },
+  });
+
   const handleCheckChange = () => {
     setIsChecked(!isChecked);
+    handleCheck.mutate();
   };
 
   const confirmDelete = () => {
