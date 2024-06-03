@@ -32,3 +32,14 @@ export const deleteTodo = async (id) => {
     throw error;
   }
 };
+
+export const editTodo = async (id, title) => {
+  try {
+    const response = await customFetch.patch(`/todos/${id}`, { title });
+    console.log('TODOS', response);
+    return response;
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
+};
