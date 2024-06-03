@@ -126,15 +126,24 @@ const TodoScreen = () => {
           />
         </View>
       </Modal>
-      <View style={styles.todosContainer}>
-        <Text style={styles.currentDate}>{currentDate}</Text>
-        <FlatList
-          data={todoData}
-          renderItem={({ item }) => <TodoItem {...item} />}
-          keyExtractor={(item) => item._id}
-          alwaysBounceVertical={true}
+      {isTodoLoading ? (
+        <ActivityIndicator
+          size="large"
+          color="#007bff"
+          style={styles.loadingIndicator}
         />
-      </View>
+      ) : (
+        <View style={styles.todosContainer}>
+          <Text style={styles.currentDate}>{currentDate}</Text>
+          <FlatList
+            data={todoData}
+            renderItem={({ item }) => <TodoItem {...item} />}
+            keyExtractor={(item) => item._id}
+            alwaysBounceVertical={true}
+            contentContainerStyle={styles.listContainer}
+          />
+        </View>
+      )}
       <View style={styles.buttonContainer}>
         <CustomButton
           title="+"
@@ -189,6 +198,11 @@ const styles = StyleSheet.create({
     flex: 7,
     paddingHorizontal: 20,
     paddingTop: 20,
+  },
+  loadingIndicator: {
+    flex: 7,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   buttonContainer: {
     position: 'absolute',
