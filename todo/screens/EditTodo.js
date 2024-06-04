@@ -1,6 +1,6 @@
 // #region Imports
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import CustomButton from '../components/Custom/CustomButton';
 import CustomTextInput from '../components/Custom/CustomTextInput';
@@ -25,6 +25,7 @@ const EditTodo = ({ route, navigation }) => {
           todo._id === _id ? { ...todo, title: newTitle } : todo
         )
       );
+      Alert.alert('Successfully edited todo list');
       navigation.goBack();
       return { previousTodos };
     },

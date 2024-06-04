@@ -17,13 +17,16 @@ import login from '../assets/login.png';
 export default function LoginScreen({ navigation }) {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsloading] = useState(false);
 
   const onLogin = async () => {
+    setIsloading(true);
     if (!userName || !password) {
       Alert.alert('Error', 'Username and password are required.');
       return;
     }
     await handleLogin({ userName, password, navigation });
+    setIsloading(false);
   };
 
   return (
@@ -31,33 +34,40 @@ export default function LoginScreen({ navigation }) {
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <ScrollView contentContainerStyle={styles.loginContainer}>
-        <Text style={styles.title}>Welcome Back!</Text>
-        <Image source={login} style={styles.image} />
-        <View style={styles.formContainer}>
-          <CustomTextInput
-            placeholder="Enter your username"
-            value={userName}
-            onChangeText={setUserName}
-          />
-          <CustomTextInput
-            placeholder="Enter your password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-          <CustomButton title="Login" onPress={onLogin} style={styles.button} />
-          <Text style={styles.accountText}>
-            Don't have an account?{' '}
-            <Text
-              style={styles.signin}
-              onPress={() => navigation.navigate('Register')}
-            >
-              Sign up
+      <View>
+        <ScrollView contentContainerStyle={styles.loginContainer}>
+          <Text style={styles.title}>Welcome Back!</Text>
+          <Image source={login} style={styles.image} />
+          <View style={styles.formContainer}>
+            <CustomTextInput
+              placeholder="Enter your username"
+              value={userName}
+              onChangeText={setUserName}
+            />
+            <CustomTextInput
+              placeholder="Enter your password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
+            <CustomButton
+              title={isLoading ? 'loading...' : 'Login'}
+              onPress={onLogin}
+              style={styles.button}
+              disabled={isLoading}
+            />
+            <Text style={styles.accountText}>
+              Don't have an account?{' '}
+              <Text
+                style={styles.signin}
+                onPress={() => navigation.navigate('Register')}
+              >
+                Sign up
+              </Text>
             </Text>
-          </Text>
-        </View>
-      </ScrollView>
+          </View>
+        </ScrollView>
+      </View>
     </KeyboardAvoidingView>
   );
 }

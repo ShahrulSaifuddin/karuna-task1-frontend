@@ -20,13 +20,10 @@ const RegisterScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [isValidEmail, setIsValidEmail] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
-  // const [formError, setFormError] = useState('');
+  const [isLoading, setIsloading] = useState(false);
 
   const handleRegister = async () => {
-    // if (!firstName || !lastName || !userName) {
-    //   setFormError('First name, last name, and username cannot be empty');
-    //   Alert.alert()
-    // }
+    setIsloading(true);
     try {
       const response = await register({
         firstName,
@@ -39,10 +36,12 @@ const RegisterScreen = ({ navigation }) => {
       if (response) {
         Alert.alert('Success', 'User registered successfully');
         navigation.navigate('Login');
+        setIsloading(false);
       }
     } catch (error) {
       console.error('Error registering user:', error);
       Alert.alert('Error', 'Failed to register user');
+      setIsloading(false);
     }
   };
 
@@ -62,81 +61,84 @@ const RegisterScreen = ({ navigation }) => {
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>Welcome Onboard</Text>
-        <Text style={styles.text}>Let's help you meet up your tasks</Text>
-        <CustomTextInput
-          placeholder="First Name"
-          value={firstName}
-          onChangeText={setFirstName}
-        />
-        {!firstName.trim() && (
-          <Text style={styles.errorText}>This field is required</Text>
-        )}
-        <CustomTextInput
-          placeholder="Last Name"
-          value={lastName}
-          onChangeText={setLastName}
-        />
-        {!lastName.trim() && (
-          <Text style={styles.errorText}>This field is required</Text>
-        )}
-        <CustomTextInput
-          placeholder="Username"
-          value={userName}
-          onChangeText={setUserName}
-        />
-        {!userName.trim() && (
-          <Text style={styles.errorText}>This field is required</Text>
-        )}
-        <CustomTextInput
-          placeholder="Email"
-          value={email}
-          onChangeText={(text) => {
-            setEmail(text);
-            validateEmail(text);
-          }}
-        />
-        {!isValidEmail && (
-          <Text style={styles.errorText}>Please enter a valid email</Text>
-        )}
-        <CustomTextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={(text) => {
-            setPassword(text);
-            validatePassword(text);
-          }}
-          secureTextEntry
-        />
-        {!isValidPassword && (
-          <Text style={styles.errorText}>
-            Password must contain at least one uppercase letter, one lowercase
-            letter, one numeric digit, and one special character
+      <View>
+        <ScrollView contentContainerStyle={styles.container}>
+          <Text style={styles.title}>Welcome Onboard</Text>
+          <Text style={styles.text}>Let's help you meet up your tasks</Text>
+          <CustomTextInput
+            placeholder="First Name"
+            value={firstName}
+            onChangeText={setFirstName}
+          />
+          {!firstName.trim() && (
+            <Text style={styles.errorText}>This field is required</Text>
+          )}
+          <CustomTextInput
+            placeholder="Last Name"
+            value={lastName}
+            onChangeText={setLastName}
+          />
+          {!lastName.trim() && (
+            <Text style={styles.errorText}>This field is required</Text>
+          )}
+          <CustomTextInput
+            placeholder="Username"
+            value={userName}
+            onChangeText={setUserName}
+          />
+          {!userName.trim() && (
+            <Text style={styles.errorText}>This field is required</Text>
+          )}
+          <CustomTextInput
+            placeholder="Email"
+            value={email}
+            onChangeText={(text) => {
+              setEmail(text);
+              validateEmail(text);
+            }}
+          />
+          {!isValidEmail && (
+            <Text style={styles.errorText}>Please enter a valid email</Text>
+          )}
+          <CustomTextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={(text) => {
+              setPassword(text);
+              validatePassword(text);
+            }}
+            secureTextEntry
+          />
+          {!isValidPassword && (
+            <Text style={styles.errorText}>
+              Password must contain at least one uppercase letter, one lowercase
+              letter, one numeric digit, and one special character
+            </Text>
+          )}
+          <CustomButton
+            title={isLoading ? 'loading...' : 'Register'}
+            onPress={handleRegister}
+            style={styles.button}
+            disabled={
+              !firstName.trim() ||
+              !lastName.trim() ||
+              !userName.trim() ||
+              !isValidEmail ||
+              !isValidPassword ||
+              isLoading
+            }
+          />
+          <Text style={styles.accountText}>
+            Already have an account?{' '}
+            <Text
+              style={styles.signin}
+              onPress={() => navigation.navigate('Login')}
+            >
+              sign in
+            </Text>
           </Text>
-        )}
-        <CustomButton
-          title="Register"
-          onPress={handleRegister}
-          style={styles.button}
-          disabled={
-            !firstName.trim() ||
-            !lastName.trim() ||
-            !userName.trim() ||
-            !isValidEmail ||
-            !isValidPassword
-          }
-        />
-        <Text style={styles.accountText}>
-          Already have an account?{' '}
-          <Text
-            style={styles.signin}
-            onPress={() => navigation.navigate('Login')}
-          >
-            sign in
-          </Text>
-        </Text>
-      </ScrollView>
+        </ScrollView>
+      </View>
     </KeyboardAvoidingView>
   );
 };
@@ -177,6 +179,5 @@ const styles = StyleSheet.create({
     color: 'red',
     marginBottom: 10,
     marginLeft: 15,
-    // textAlign: 'center',
   },
 });

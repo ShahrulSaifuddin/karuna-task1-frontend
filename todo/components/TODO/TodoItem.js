@@ -16,6 +16,7 @@ const TodoItem = ({ _id, title, completed, onEdit }) => {
   const navigation = useNavigation();
   const [isChecked, setIsChecked] = useState(completed);
 
+  // #region Query Logic
   const handleDelete = useMutation({
     mutationFn: () => deleteTodo(_id),
     onMutate: async () => {
@@ -24,6 +25,7 @@ const TodoItem = ({ _id, title, completed, onEdit }) => {
       queryClient.setQueryData(['todos'], (old) =>
         old.filter((todo) => todo._id !== _id)
       );
+      Alert.alert('Successfully delete a todo list');
       return { previousTodos };
     },
     onError: (err, _, context) => {
@@ -53,7 +55,9 @@ const TodoItem = ({ _id, title, completed, onEdit }) => {
       queryClient.invalidateQueries(['todos']);
     },
   });
+  // #endregion
 
+  // #region Event Handler
   const handleCheckChange = () => {
     setIsChecked(!isChecked);
     handleCheck.mutate();
@@ -80,6 +84,7 @@ const TodoItem = ({ _id, title, completed, onEdit }) => {
   const handleEdit = () => {
     navigation.navigate('EditTodo', { _id, currentTitle: title });
   };
+  // #endregion
 
   return (
     <View style={styles.container}>
@@ -100,8 +105,16 @@ const TodoItem = ({ _id, title, completed, onEdit }) => {
           scrollEnabled={false}
         />
       </View>
-      <TouchableOpacity onPress={handleEdit} style={styles.iconButton}>
-        <MaterialIcons name="edit" size={24} color="#007bff" />
+      <TouchableOpacity
+        onPress={handleEdit}
+        style={styles.iconButton}
+        disabled={isChecked}
+      >
+        <MaterialIcons
+          name="edit"
+          size={24}
+          color={isChecked ? '#808080' : '#007bff'}
+        />
       </TouchableOpacity>
       <TouchableOpacity onPress={confirmDelete} style={styles.iconButton}>
         <MaterialIcons name="delete" size={24} color="#dc3545" />

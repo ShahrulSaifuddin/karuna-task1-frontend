@@ -9,6 +9,7 @@ import {
   Modal,
   Image,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import TodoItem from '../components/TODO/TodoItem';
 import TodoInput from '../components/TODO/TodoInput';
@@ -56,16 +57,17 @@ const TodoScreen = () => {
   const addTodo = useMutation({
     mutationFn: createTodo,
     onMutate: async (newTodo) => {
-      await queryClient.cancelQueries(['todos']); // Cancel queries related to 'todos'
-      const previousTodos = queryClient.getQueryData(['todos']); // Get previous todos from cache
-      queryClient.setQueryData(['todos'], (old) => [...old, newTodo]); // Update todos optimistically
+      await queryClient.cancelQueries(['todos']);
+      const previousTodos = queryClient.getQueryData(['todos']);
+      queryClient.setQueryData(['todos'], (old) => [...old, newTodo]);
+      Alert.alert('Successfully created a new todo list');
       return { previousTodos };
     },
     onError: (err, newTodo, context) => {
-      queryClient.setQueryData(['todos'], context.previousTodos); // Rollback changes on error
+      queryClient.setQueryData(['todos'], context.previousTodos);
     },
     onSettled: () => {
-      queryClient.invalidateQueries(['todos']); // Invalidate 'todos' query to refetch data
+      queryClient.invalidateQueries(['todos']);
     },
   });
   // #endregion
@@ -89,7 +91,7 @@ const TodoScreen = () => {
     try {
       const response = await customFetch.get('/auth/logout');
       console.log('response', response.data.msg);
-      console.log('User logged out');
+      Alert.alert('User logout');
       navigation.navigate('Login');
     } catch (error) {
       console.error('Logout failed', error);
