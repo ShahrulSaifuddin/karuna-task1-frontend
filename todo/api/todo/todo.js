@@ -7,7 +7,7 @@ export const fetchAllTodos = async () => {
     console.log('TODOS', response.data.todo);
     return response.data.todo;
   } catch (error) {
-    console.error('Error fetching current user:', error);
+    console.error('Error fetching todo lists:', error);
     throw error;
   }
 };
@@ -20,7 +20,7 @@ export const createTodo = async (title) => {
     console.log('TODOS', response);
     return response;
   } catch (error) {
-    console.error('Error fetching current user:', error);
+    console.error('Error creating todo:', error);
     throw error;
   }
 };
@@ -33,7 +33,7 @@ export const deleteTodo = async (id) => {
     console.log('TODOS', response);
     return response;
   } catch (error) {
-    console.error('Error fetching current user:', error);
+    console.error('Error deleting todo:', error);
     throw error;
   }
 };
@@ -46,7 +46,7 @@ export const editTodo = async (id, title) => {
     console.log('TODOS', response);
     return response;
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Error edit todo:', error);
     throw error;
   }
 };
@@ -59,7 +59,7 @@ export const updateTodo = async (id) => {
     console.log('TODOS', response);
     return response;
   } catch (error) {
-    console.error('Error fetching current user:', error);
+    console.error('Error update todo:', error);
     throw error;
   }
 };

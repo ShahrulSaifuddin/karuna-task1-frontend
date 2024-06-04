@@ -90,6 +90,7 @@ const TodoScreen = () => {
   const logoutHandler = async () => {
     try {
       const response = await customFetch.get('/auth/logout');
+      queryClient.clear();
       console.log('response', response.data.msg);
       Alert.alert('User logout');
       navigation.navigate('Login');
