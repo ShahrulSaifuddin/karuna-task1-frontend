@@ -116,6 +116,7 @@ const TodoScreen = () => {
   if (todoError) {
     return <Text>{todoError.message}</Text>;
   }
+  console.log('todoData', todoData);
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -163,6 +164,9 @@ const TodoScreen = () => {
       ) : (
         <View style={styles.todosContainer}>
           <Text style={styles.currentDate}>{currentDate}</Text>
+          {todoData.length === 0 && (
+            <Text style={styles.emptyMessage}>Create your todo list now!</Text>
+          )}
           <FlatList
             data={todoData}
             renderItem={({ item }) => <TodoItem {...item} />}
@@ -199,6 +203,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
     paddingBottom: 10,
+  },
+  emptyMessage: {
+    textAlign: 'center',
+    color: 'gray',
   },
   userImage: {
     width: 50,
